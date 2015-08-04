@@ -1,0 +1,34 @@
+<?php
+
+/*
+ *  This file is managed by puppet.
+ */
+
+// Enter MySQL Database Host.
+$pch->dbHost('<%= @mysql_dbHost -%>');
+$pch->dbUsername('<%= @mysql_dbUsername -%>');
+$pch->dbPassword('<%= @mysql_dbPassword -%>');
+$pch->dbName('<%= @mysql_dbName -%>');
+
+// Site Name
+$pch->assign('site_name', '<%= @phpchain_sitename -%>');
+$pch->theme('');
+define('PCH_USE_SSL', false);
+define('PCH_TIME_LIMIT', 10 * 60);
+define('PCH_MAX_TRIES', 3);
+define('PCH_TABLE_PREFIX' , 'pch_');
+define('PCH_WSS_DOMAIN', 'localhost');
+$pch->assign('file_ext', '.php');
+$pch->assign('hide_login', false);
+$pch->assign('date_format', '%a, %d %B %I:%M %p');
+$pch->algorithm('Blowfish');
+$pch->debug(false, 'html');
+
+if (strpos($_SERVER['SCRIPT_NAME'], basename(__FILE__)) !== false
+        || !is_object($pch)) {
+    header('location: ../index.php');
+    exit;
+}
+
+?>
+
