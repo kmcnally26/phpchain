@@ -59,17 +59,17 @@ class { 'apache': }
     source  => "puppet:///modules/${module_name}/phpchain-2.0.11-beta.tgz"
   }->
 
+  exec { "Extract phpchain source code" :
+    command => "/bin/tar xzf ${phpchain::phpchain_root}/phpchain-2.0.11-beta.tgz -C ${phpchain::phpchain_root}",
+    unless  => "/bin/ls /${phpchain::phpchain_root}/phpchain-2/config",
+  }->
+
   file { "${phpchain::phpchain_root}/phpchain-2":
     ensure  => directory,
     recurse => true,
     owner   => 'apache',
     group   => 'apache',
     mode    => '644',
-  }->
-
-  exec { "Extract phpchain source code" :
-    command => "/bin/tar xzf ${phpchain::phpchain_root}/phpchain-2.0.11-beta.tgz -C ${phpchain::phpchain_root}",
-    unless  => "/bin/ls /${phpchain::phpchain_root}/phpchain-2/config",
   }->
 
 ## Tar gets extracted as phpchain-2 so symlink
