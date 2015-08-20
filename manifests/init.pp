@@ -1,101 +1,97 @@
 class phpchain (
 
-  $ssl_hostname                     = 'phpchain.local.lan'
-  $phpchain_sitename                = 'Lastminute phpChain'
-  $phpchain_root                    = '/var/www/html'
-  $mysql_rootpw                     = 'password'
-  $mysql_dbHost                     = 'localhost'
-  $mysql_dbUsername                 = 'phpchain'
-  $mysql_dbPassword                 = 'password'
-  $mysql_dbName                     = 'phpchain'
+  $ssl_hostname                     = 'phpchain.local.lan',
+  $phpchain_sitename                = 'Lastminute phpChain',
+  $phpchain_root                    = '/var/www/html',
+  $mysql_rootpw                     = 'password',
+  $mysql_dbHost                     = $ipaddress,
+  $mysql_dbUsername                 = 'phpchain',
+  $mysql_dbPassword                 = 'password',
+  $mysql_dbName                     = 'phpchain',
 
 )  {
 
-  file { '/etc/httpd/conf.d/ssl.conf':
-    owner   => 'root',
-    group   => 'root',
-    mode    => '644',
-    content => template("${module_name}/ssl.conf.erb"),
+## Apache setup
+class { 'apache': }
+  include apache::mod::php
+  apache::vhost { $ssl_hostname :
+    port    => '443',
+    docroot => $phpchain_root,
+    ssl     => true,
+  }
+#  class { 'apache':
+#    default_mods => false,  
+#  }  
+#  include apache::mod::php  
+#  apache::vhost { 'webserver.puppetlabs.com':    
+#    port    => '80',    
+#   docroot => '/var/www/webserver'  
+#  }
+#}
+
+## Mysql setup
+  class { '::mysql::server':
+    root_password           => $mysql_rootpw,
+    remove_default_accounts => true,
+    create_root_my_cnf      => true,
+    override_options => { 'mysqld' => { 'max_connections' => '1024', 'bind-address' => "$mysql_dbHost" } }
   }
 
-  file { "/${phpchain::phpchain_root}/phpchain":
+  mysql::db { $mysql_dbName:
+    user     => $mysql_dbUsername,
+    password => $mysql_dbPassword,
+    host     => $mysql_dbHost,
+  }
+
+  mysql_grant { "${mysql_dbUsername}@${mysql_dbHost}/*.*":
+    ensure     => 'present',
+    options    => ['GRANT'],
+    privileges => ['ALL'],
+    table      => '*.*',
+    user       => "${mysql_dbUsername}@${mysql_dbHost}",
+  }
+
+## phpchain setup
+  file { "${phpchain::phpchain_root}/phpchain-2.0.11-beta.tgz":
+    owner   => 'apache',
+    group   => 'apache',
+    mode    => '644',
+    source  => "puppet:///modules/${module_name}/phpchain-2.0.11-beta.tgz"
+  }->
+
+  file { "${phpchain::phpchain_root}/phpchain-2":
     ensure  => directory,
     recurse => true,
     owner   => 'apache',
     group   => 'apache',
     mode    => '644',
-  }
-
-  file { "/${phpchain::phpchain_root}/phpchain-2.0.11-beta.tgz":
-    owner   => 'apache',
-    group   => 'apache',
-    mode    => '644',
-    source  => "puppet:///modules/${module_name}/phpchain-2.0.11-beta.tgz"
-  }
+  }->
 
   exec { "Extract phpchain source code" :
     command => "/bin/tar xzf ${phpchain::phpchain_root}/phpchain-2.0.11-beta.tgz -C ${phpchain::phpchain_root}",
-    unless  => "/bin/ls /${phpchain::phpchain_root}/phpchain/config/config.php",
-  }
+    unless  => "/bin/ls /${phpchain::phpchain_root}/phpchain-2/config",
+  }->
 
-  file { "/${phpchain::phpchain_root}/phpchain/config/config.php":
+## Tar gets extracted as phpchain-2 so symlink
+  file { "${phpchain::phpchain_root}/phpchain":
+    ensure => link,
+    target => "${phpchain::phpchain_root}/phpchain-2",
+  }->
+
+
+  file { "${phpchain::phpchain_root}/phpchain-2/config/config.php":
+    ensure  => present,
     owner   => 'apache',
     group   => 'apache',
     mode    => '644',
     content => template("${module_name}/config.php.erb"),
   }
 
-  service { 'mysqld':
-    ensure => running,
-    enable => true,
-    hasstatus => true,
-    hasrestart => true,
-  }
-
-  service { 'httpd':
-    ensure => running,
-    enable => true,
-    hasstatus => true,
-    hasrestart => true,
-  }
-
-  package { [ 'httpd',
-              'mod_ssl',
-              'php',
+  package { [ 'php',
               'php-mcrypt',
-              'php-mysql',
-              'mysql-server',
-              'mysql',
-              'mod_ssl'
+              'php-mysql'
               ]:
     ensure => installed,
   }
 
-## Mysql
-  file { '/root/.my.cnf':
-    owner   => 'root',
-    group   => 'root',
-    mode    => '640',
-    content => template("${module_name}/my.cnf.erb"),
-  }
-
-  exec { "Set root account for mysql install" :
-    command => "/usr/bin/mysqladmin -e '-u root password ${phpchain::mysql_rootpw};'",
-    unless  => "/usr/bin/mysql -e 'use ${phpchain::mysql_dbName};'",  
-  }
- 
-  exec { "Create database ${phpchain::mysql_dbName}" :
-    command => "/usr/bin/mysql -e 'CREATE DATABASE IF NOT EXISTS ${phpchain::mysql_dbName};'",
-    unless  => "/usr/bin/mysql -e 'use ${phpchain::mysql_dbName};'",  
-  }
- 
-  exec { "Create database ${phpchain::mysql_dbName}" :
-    command => "/usr/bin/mysql -e 'create user ${phpchain::mysql_dbUsername}@${phpchain::mysql_dbHost} identified by ${phpchain::mysql_dbPassword};'",
-    unless  => "/usr/bin/mysql -e 'use ${phpchain::mysql_dbName};'",  
-  }
- 
-  exec { "Create database ${phpchain::mysql_dbName}" :
-    command => "/usr/bin/mysql -e 'grant all privileges on ${phpchain::mysql_dbName}* to ${phpchain::mysql_dbUsername}@${phpchain::mysql_dbHost};'",
-    unless  => "/usr/bin/mysql -e 'use ${phpchain::mysql_dbName};'",  
-  }
- 
+}
