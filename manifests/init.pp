@@ -51,7 +51,7 @@ class { 'apache': }
     user       => "${mysql_dbUsername}@${mysql_dbHost}",
   }
 
-## phpchain setup
+## phpchain setup - Maybe this should be a git clone etc and get dir structure
   file { "${phpchain::phpchain_root}/phpchain-2.0.11-beta.tgz":
     owner   => 'apache',
     group   => 'apache',
