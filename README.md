@@ -14,4 +14,7 @@ Add detail to init.pp
   $mysql_dbPassword                 = 'password',
   $mysql_dbName                     = 'phpchain',
 ```
-Create SSL certs as per above.
+Create SSL certs as per above and move to path.
+```
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout phpchain2.local.lan.key -out phpchain2.local.lan.crt
+```
