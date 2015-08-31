@@ -1,10 +1,13 @@
 class phpchain (
 
-  $ssl_hostname                     = 'phpchain.local.lan',
-  $phpchain_sitename                = 'Lastminute phpChain',
+  $ssl_hostname                     = 'phpchain2.local.lan',
+  $ssl_keypath                      = '/etc/pki/tls/private/phpchain2.local.lan.key',
+  $ssl_certpath                     = '/etc/pki/tls/certs/phpchain2.local.lan.crt',
   $phpchain_root                    = '/var/www/html',
+
+  $phpchain_sitename                = 'Lastminute phpChain',
   $mysql_rootpw                     = 'password',
-  $mysql_dbHost                     = $ipaddress,
+  $mysql_dbHost                     = 'localhost',
   $mysql_dbUsername                 = 'phpchain',
   $mysql_dbPassword                 = 'password',
   $mysql_dbName                     = 'phpchain',
@@ -15,19 +18,13 @@ class phpchain (
 class { 'apache': }
   include apache::mod::php
   apache::vhost { $ssl_hostname :
-    port    => '443',
-    docroot => $phpchain_root,
-    ssl     => true,
-  }
-#  class { 'apache':
-#    default_mods => false,  
-#  }  
-#  include apache::mod::php  
-#  apache::vhost { 'webserver.puppetlabs.com':    
-#    port    => '80',    
-#   docroot => '/var/www/webserver'  
-#  }
-#}
+    port     => '443',
+    docroot  => $phpchain_root,
+    ssl      => true,
+    ssl_key  => $ssl_keypath,
+    ssl_cert => $ssl_certpath,
+
+}
 
 ## Mysql setup
   class { '::mysql::server':
@@ -88,6 +85,7 @@ class { 'apache': }
   }
 
   package { [ 'php',
+              'php-common',
               'php-mcrypt',
               'php-mysql'
               ]:
