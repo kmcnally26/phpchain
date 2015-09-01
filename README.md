@@ -1,20 +1,26 @@
 # phpchain
 Puppet module to install phpchain 2.0
 
-Add detail to init.pp
+Requires EPEL
+
+Create SSL certs and move to path.
+
 ```
-  $ssl_hostname                     = 'phpchain2.local.lan',
-  $ssl_keypath                      = '/etc/pki/tls/private/phpchain2.local.lan.key',
-  $ssl_certpath                     = '/etc/pki/tls/certs/phpchain2.local.lan.crt',
-  $phpchain_root                    = '/var/www/html',
-  $phpchain_sitename                = 'Lastminute phpChain',
-  $mysql_rootpw                     = 'password',
-  $mysql_dbHost                     = 'localhost',
-  $mysql_dbUsername                 = 'phpchain',
-  $mysql_dbPassword                 = 'password',
-  $mysql_dbName                     = 'phpchain',
+  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/pki/tls/private/phpchain2.local.lan.key -out /etc/pki/tls/certs/phpchain2.local.lan.crt
 ```
-Create SSL certs as per above and move to path.
+
+Web UI
+Login into the web ui and create a login user. Then we need to disable newuser.php
+
 ```
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout phpchain2.local.lan.key -out phpchain2.local.lan.crt
+  mv newuser.php{,.off}
+```
+
+Restore from sql backup
+If you loose the login then you need to rebuild and restore the db.
+Delete existing http and mysql data and config.
+Re run this puppet module and restore the db eg.
+
+```
+  mysql -u root -p -h localhost phpchain <mysql_backup_phpchain_20150901-194809.sql
 ```
