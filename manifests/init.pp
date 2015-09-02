@@ -101,14 +101,6 @@ class { 'apache': }
     content => template("${module_name}/config.php.erb"),
   }
 
-  file { "${phpchain::phpchain_base}/phpchain/setup.php":
-    owner   => 'apache',
-    group   => 'apache',
-    mode    => '644',
-    source  => "puppet:///modules/${module_name}/setup.php",
-  }
-
-
   package { [ 'php',
               'php-common',
               'php-mcrypt',
