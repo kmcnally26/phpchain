@@ -10,13 +10,14 @@ Create SSL certs and move to path.
 ```
 
 Web UI
-Login into the web ui and create a login user. Then we need to disable newuser.php
+Login into the web ui, follow instructions and create a login user. 
+Then we need to disable newuser.php
 
 ```
   mv newuser.php{,.off}
 ```
 
-Restore from sql backup
+Restoring from sql backup
 If you loose the login then you need to rebuild and restore the db.
 Delete existing http and mysql data and config.
 Re run this puppet module and restore the db eg.
