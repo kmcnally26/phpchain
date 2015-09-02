@@ -1,3 +1,0 @@
-To clear all and start again if there are puppet errors
-
-rm -rf /var/lib/mysql/ ; rm -rf /var/www/html/ ; rm -f /etc/my.cnf ; service mysqld stop ; rm -f /root/.my.cnf

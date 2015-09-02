@@ -52,11 +52,12 @@ class { 'apache': }
   }
 
   class { '::mysql::backup::mysqldump': 
-    backupuser     => $mysql_backupuser,
-    backuppassword => $mysql_backuppw,
-    backupdir      => '/root/phpchain-mysql-backups', 
+    backupuser      => $mysql_backupuser,
+    backuppassword  => $mysql_backuppw,
+    backupdir       => '/root/phpchain-mysql-backups', 
     backupdatabases => $mysql_dbName,
     backuprotate    => 7,
+    time            => ['21','01'],
   }
 
 ## phpChain
