@@ -10,7 +10,7 @@ Create SSL certs and move to path.
 ```
 
 Web UI
-Login into the web ui, follow instructions and create a login user. 
+Login into the web ui, follow instructions to delete setup files and then create a login user. 
 Then we need to disable newuser.php
 
 ```
