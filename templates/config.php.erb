@@ -1,0 +1,142 @@
+<?php
+/**
+ * Site Configuration.
+ *
+ * This file is part of phpChain.
+ *
+ * phpChain is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * phpChain is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with phpChain; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @package    phpChain
+ * @version    $Id: config.dist.php,v 1.10 2006/01/10 00:52:44 gogogadgetscott Exp $
+ * @link       http://phpchain.sourceforge.net/
+ * @author     Scott Greenberg <me@gogogadgetscott.com>
+ * @copyright  Copyright (c) 2005-2006. SEG Technology. All rights reserved.
+ */
+/*
+ * Check that script is not called directly.
+ */
+if (strpos($_SERVER['SCRIPT_NAME'], basename(__FILE__)) !== false
+	|| !is_object($pch)) {
+    header('location: ../index.php');
+    exit;
+}
+
+/*
+ * These are site wide configuration options that effect the entire application
+ * regardless of user.
+ */
+// -----------------------------------------------------------------------------
+
+/*
+ * Enter MySQL Database Host.
+ */
+$pch->dbHost('<%= @mysql_dbHost -%>');
+/*
+ * Enter MySQL Database Username here.
+ */
+$pch->dbUsername('<%= @mysql_dbUsername -%>');
+/*
+ * Enter MySQL Database Password here.
+ */
+$pch->dbPassword('<%= @mysql_dbPassword -%>');
+/*
+ * Enter MySQL Database Name here.
+ */
+$pch->dbName('<%= @mysql_dbName -%>');
+
+// -----------------------------------------------------------------------------
+
+/*
+ * Site name for title for documents. Shown in both browser title and page 
+ * header.
+ */
+$pch->assign('site_name', 'phpChain');
+/*
+ * Set default theme.
+ */
+$pch->theme('');
+/*
+ * Whether a SSL connection is required to login.
+ * Value: true or false
+ */
+define('PCH_USE_SSL', false);
+/*
+ * Time limit until failed login attempts are discarded. Seconds.
+ */
+define('PCH_TIME_LIMIT', 10 * 60);
+/*
+ * Maximum number of login attempts allowed within time limit.
+ */
+define('PCH_MAX_TRIES', 3);
+/*
+ * Prefix of database table names. Use to resolve name conflict when sharing a
+ * single database.
+ */
+define('PCH_TABLE_PREFIX' , 'pch_');
+/*
+ * SSL host domain. Uncomment to set ssl domain.  If not set, current host
+ * is used.  DO NOT include tailing slash.
+ * Used on servers where a shared certificate maybe in use like on a
+ * shared host.
+ */
+#define('PCH_WSS_DOMAIN', '192.168.1.1');
+/*
+ * Un-comment when content negotiation is not available. If page-not-found
+ * errors are appearing it is likely this should be un-commented and
+ * set to '.php'. 
+ */
+$pch->assign('file_ext', '.php');
+/*
+ * Whether username login field should be hidden with '*'. This is enable to
+ * prevent exposure of key in the case when user fails to advance to 
+ * password field before entering password.  Which would result in key begin
+ * exposed in plain text on screen.
+ * true or false
+ */
+$pch->assign('hide_login', true);
+/*
+ * Date format used. 
+ * @link http://smarty.php.net/manual/en/language.modifier.date.format.php
+ *       date_format (Smarty online manual)
+ * @link http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html
+ * Sample value options: 
+ * %a, %d %b %Y %T       -> Wed, 31 Aug 2005 23:31:20
+ * %a, %d %b %Y %I:%M %p -> Wed, 31 Aug 2005 11:29 PM
+ * %D %I:%M %p           -> 08/31/05 11:32 PM
+ */
+$pch->assign('date_format', '%a, %d %B %I:%M %p');
+/*
+ * Desired algorithm used for encryption.
+ * Once database is setup this cannot be changed. Do so will prevent data from 
+ * being accessed and decrypted.
+ * Value options: Blowfish, Cast_256, Rijndael_256, Twofish
+ */
+$pch->algorithm('Blowfish');
+
+// -----------------------------------------------------------------------------
+
+/*
+ * Debugging mode.  When set to true will create a popup with parse & log 
+ * information. Set the value to false when running live server. Please note,
+ * no password information will be displayed.
+ * 
+ * Second parameter for ::debug determines the display style.
+ * Currently supported modes are 'html' and 'popup'.
+ */
+$pch->debug(false, 'html');
+
+// -----------------------------------------------------------------------------
+
+?>
