@@ -4,7 +4,7 @@
 
 ## Puppet module to install phpchain 2.0
 
-Requires EPEL repo, puppet modules Apache n MySQL
+Requires EPEL repo, puppet modules Apache and MySQL
 
 Create SSL certs and move to path.
 
