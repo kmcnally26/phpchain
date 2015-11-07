@@ -4,16 +4,17 @@
 
 ## Puppet module to install phpchain 2.0
 
-Requires EPEL repo, puppet modules Apache and MySQL
+Requires EPEL and puppet modules Apache, MySQL.
 
-Create SSL certs and move to path.
+Create SSL certs.
 
 ```
   openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/pki/tls/private/phpchain2.local.lan.key -out /etc/pki/tls/certs/phpchain2.local.lan.crt
 ```
 
 Web UI
-Login into the web ui, follow instructions to delete setup files and then create a login user. 
+
+Login into the ui, follow instructions to delete setup files and then create a login user. 
 Then we need to disable newuser.php
 
 ```
@@ -21,6 +22,7 @@ Then we need to disable newuser.php
 ```
 
 Restoring from sql backup
+
 If you loose the login then you need to rebuild and restore the db.
 Delete existing http and mysql data and config.
 Re run this puppet module and restore the db eg.
