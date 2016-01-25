@@ -1,0 +1,61 @@
+---
+
+classes:
+  - lm_role_phpchain
+
+lm_yumrepo::repo::repo_hash:
+ 'lmn-epel':
+    descr: 'EPEL Repo'
+    baseurl: "https://lm-prd-pulp001.prd.ams1.lmn.intra/pulp/repos/centos/%{::operatingsystemmajrelease}/epel/$basearch"
+    enabled: 1
+    sslverify: 'False'
+
+lm_role_phpchain::keypath:               '/etc/pki/tls/private/lm-prd-phpchain001.prd.ams1.lmn.intra.key'
+lm_role_phpchain::certpath:              '/etc/pki/tls/certs/lm-prd-phpchain001.prd.ams1.lmn.intra.crt'
+lm_role_phpchain::phpchain_root:         '/opt/www/phpchain'
+lm_role_phpchain::phpchain_base:         '/opt/www'
+lm_role_phpchain::phpchain_sitename:     'Lastminute phpChain'
+lm_role_phpchain::mysql_rootpw: >
+    ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEw
+    DQYJKoZIhvcNAQEBBQAEggEAat33l2f7sFzb6jIbVLAR2nuGDZLe5uxuXeD1
+    91nDKLjOCqIMNuRYeCo3AO1ktdZlQdVFyn4htovaN49935r/Gw0PSX1DKRUw
+    lGqJWbJnui9khg09pe85AsaioSYIDkdlcoBS5f/f1BLfMXXDdq7lC41ikEeb
+    TSLwDe5G+SBJgvsG8rlb3iTugbWijxYlP7ab0nOUcE+70mMmn1Rqv8fw+G0L
+    YBIqutTi37FfxoogMPprfwHHC4Mnu8uLBml22QB0g0TNs8SED9HHUV33N/yd
+    qWC4THlfGdt8WKHBfS+qXxMLIyDNgbYKsu2JtQbAjlTnbbiFMdnOGsor5Gen
+    Y/RKijA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBCDzkFRfP18Fonxumhj
+    WbwZgBBf9vsJf9k+pZeiJwXO4UWD]
+lm_role_phpchain::mysql_dbHost:          'localhost'
+lm_role_phpchain::mysql_dbUsername:      'phpchain'
+lm_role_phpchain::mysql_dbPassword: >
+    ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEw
+    DQYJKoZIhvcNAQEBBQAEggEARQG5HwdBen+XwnIYEyAT00bZ466qHP/KvcdF
+    QOYLnoG/avzvtcvcUj8udXpLdT7umu/ydGkqikKSq1qbbX+8cp/eIOHD6WHR
+    e4fZpe0dr5slFdjrX1NUCzvjoAyw3ogEeobsRXCixvq1TuXq6Gh4DH43e/NP
+    VBSxgP694IItOcFeCcquzBKo6VXLK2QVZNEAG0CmYKd7E0fc8Lsp71Z0s2EK
+    ts5VOL6Ryem4HMoMAya8sgtni/lkbKVqECjbLTJAYRjNuWzZcghjPEGowjAy
+    J2WmbWLnfM1RAjEzmUe7R6A0bodMWiTGuAUDoOzuUFtLnbR/0JUMBbmXNghf
+    vviRFDA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBDMKaeft3LkIIQMiGF8
+    tDFQgBDZsy6GWKzTXL535Hj2oOSx]
+lm_role_phpchain::mysql_dbName:          'phpchain'
+lm_role_phpchain::mysql_backupuser:      'MrBackups'
+lm_role_phpchain::mysql_backuppw: >
+    ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEw
+    DQYJKoZIhvcNAQEBBQAEggEAZ8rHzls5mpYV4K7QHadW5fyj0BgexfHoLBLN
+    2kyR299UGqZiSIPjjSk5vDyyJPJ81p9rM36SkmQMopWQbad+MVi+JmyS6TEZ
+    RunklatoEB3UK3IEBq2wiGlDVCct1t1fixgfb3oSWsWKInbafT0szZSQb8HP
+    wYs3kWG/EKZbqPOBEDMTkIDNM7JHiLQGpU9lOqNEG3PJ8Dg1PzxQ+A469ROC
+    luaoZd2i5q/zt4GMI4u17W8UkAEpj1Q37nB4X+np5WLYg0HsLwPrDWbkAGgx
+    0cM5aGFg5DyxXLrh9VaObhFPeJU/CPi60OcvEiEIuKk1r3yjxYcxhrQdo8GD
+    QnBJwTA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBAS9urbP9+fWaW2qcFz
+    SdkTgBAC6MGcJnvlqWWWUF14Y20G]
+
+package::package:
+  'php':
+    ensure: 'installed'
+  'php-common':
+    ensure: 'installed'
+  'php-mcrypt':
+    ensure: 'installed'
+  'php-mysql':
+    ensure: 'installed'
