@@ -2,9 +2,9 @@
 
 
 
-## Puppet module to install phpchain 2.0
+## Puppet module to install phpchain 2.0 on RHEL
 
-Requires EPEL and puppet modules Apache, MySQL.
+Requires EPEL and puppet modules Apache, MySQL and packages. Data goes into heira.
 
 Create SSL certs.
 
