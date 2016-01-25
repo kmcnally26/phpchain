@@ -2,9 +2,11 @@
 
 
 
-## Puppet module to install phpchain 2.0 on RHEL
+## Puppet module to install phpchain 2.0 on RHEL6
 
-Requires EPEL and puppet modules Apache, MySQL and packages. Data goes into heira.
+PhpChain uses a web interface, encrypts the passwords in a MySQL database, and supports multiple users, each with their own account. 
+
+Requires puppet modules Apache, MySQL and packages. Data goes into heira.
 
 Create SSL certs.
 
